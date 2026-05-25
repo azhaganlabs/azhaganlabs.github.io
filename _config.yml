@@ -1,0 +1,7 @@
+title: Azhagan Labs
+description: Notes on startups, career, health, and ideas
+url: "https://azhaganlabs.github.io"
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
