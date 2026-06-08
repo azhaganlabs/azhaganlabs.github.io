@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title — Azhagan Labs</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+
+  <!--
+    IF THE ARTIFACT USES REACT, uncomment these three lines:
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  -->
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="site-nav">
+    <a href="/" class="nav-logo">Azhagan <span>Labs</span></a>
+    <ul class="nav-links">
+      <li><a href="/startup/">Startup</a></li>
+      <li><a href="/fitness/">Fitness</a></li>
+      <li><a href="/cissp/">CISSP</a></li>
+      <li><a href="/career/">Career</a></li>
+      <li><a href="/finance/">Finance</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <p class="breadcrumb"><a href="/">Home</a> · <a href="/fitness/">Fitness</a> · Transformation Plan</p>
+    <h1 class="page-title">Body <em>Transformation</em></h1>
+    <p class="page-meta">12 Weeks · Bodyweight Only · Updated June 2026</p>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="page-content">
+
+    <!--
+      PASTE YOUR CLAUDE ARTIFACT BELOW.
+
+      Option A — Plain HTML artifact:
+      Just paste the HTML directly here.
+
+      Option B — React artifact:
+      1. Enable the React scripts in <head> above
+      2. Paste the artifact's <div id="root"></div>
+      3. Change <script type="text/javascript"> to <script type="text/babel">
+      4. Replace ReactDOM.createRoot / render calls if needed (React 18 works fine)
+
+      Wrap it in the artifact-container for consistent styling:
+    -->
+
+    <div class="artifact-container">
+      <div class="artifact-label">Interactive Artifact</div>
+      <div class="artifact-inner">
+        <!-- ↓ PASTE ARTIFACT HERE ↓ -->
+
+        <p style="color: var(--text-muted); font-style: italic;">Artifact content goes here.</p>
+
+        <!-- ↑ PASTE ARTIFACT HERE ↑ -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <span class="footer-logo">Azhagan Labs</span>
+    <span class="footer-text">Built on GitHub Pages · Updated continuously</span>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('site-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
+
+</body>
+</html>

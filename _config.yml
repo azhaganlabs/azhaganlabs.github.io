@@ -1,5 +1,18 @@
-# _config.yml
 title: Azhagan Labs
-description: Personal OS — Startup, Fitness, Career, Finance
+description: Personal OS — Startup, Fitness, CISSP, Career & Finance
 url: "https://azhaganlabs.github.io"
-exclude: ["README.md", "node_modules"]
+baseurl: ""
+
+# Exclude files Jekyll shouldn't process
+exclude:
+  - README.md
+  - TEMPLATE_SUBPAGE.html
+  - node_modules/
+  - Gemfile
+  - Gemfile.lock
+
+# Don't use a theme — we're pure HTML
+theme: null
+
+# Keep collections off
+collections: {}
