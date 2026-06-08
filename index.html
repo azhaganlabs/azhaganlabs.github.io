@@ -12,30 +12,21 @@
   <!-- NAV -->
   <nav class="nav" id="site-nav">
     <a href="/" class="nav-logo">Azhagan <span>Labs</span></a>
-    <div class="nav-right">
-      <ul class="nav-links">
-        <li><a href="/startup/">Startup</a></li>
-        <li><a href="/fitness/">Fitness</a></li>
-        <li><a href="/cissp/">CISSP</a></li>
-        <li><a href="/career/">Career</a></li>
-        <li><a href="/finance/">Finance</a></li>
-      </ul>
-
-      <button class="theme-toggle" id="theme-toggle">☾</button>
-    </div>
+    <ul class="nav-links">
+      <li><a href="/startup/">Startup</a></li>
+      <li><a href="/fitness/">Fitness</a></li>
+      <li><a href="/cissp/">CISSP</a></li>
+      <li><a href="/career/">Career</a></li>
+      <li><a href="/finance/">Finance</a></li>
+    </ul>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="hero-content">
-      <p class="hero-eyebrow fade-up fade-up-1">
-        Personal<br>Operating<br>System
-      </p>
-
-      <h1 class="hero-title fade-up fade-up-2">
-        <em>Building something permanent.</em>
-      </h1>
+      <p class="hero-eyebrow fade-up fade-up-1">Personal Operating System</p>
+      <h1 class="hero-title fade-up fade-up-2">Building<br><em>something</em><br>permanent.</h1>
       <p class="hero-subtitle fade-up fade-up-3">
         A central repository for every plan, artifact, and decision — 
         startup experiments, physical transformation, certifications, and the long game.
@@ -176,27 +167,8 @@
 
   <script>
     const nav = document.getElementById('site-nav');
-    const themeToggle = document.getElementById('theme-toggle');
-
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 40);
-    });
-
-    const savedTheme = localStorage.getItem('theme');
-
-    if (savedTheme === 'light') {
-      document.documentElement.classList.add('light-mode');
-      themeToggle.innerHTML = '☀';
-    }
-
-    themeToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('light-mode');
-
-      const isLight = document.documentElement.classList.contains('light-mode');
-
-      themeToggle.innerHTML = isLight ? '☀' : '☾';
-
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
   </script>
 
