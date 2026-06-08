@@ -1,0 +1,711 @@
+import { useState } from "react";
+
+const data = {
+  profile: {
+    name: "Azhagan",
+    age: 31,
+    weight: 70.6,
+    bmi: 23.1,
+    bodyFat: 24.8,
+    muscleMass: 29.8,
+    bmr: 1517,
+    visceralFatLevel: 7,
+    waistHipRatio: 0.92,
+    inBodyScore: 68,
+    protein: 10.6,
+    mineral: 3.64,
+    totalWater: 38.9,
+  },
+  insights: [
+    { icon: "⚖️", label: "Weight", value: "70.6 kg", status: "neutral" },
+    { icon: "🔥", label: "Body Fat", value: "24.8% → Target <15%", status: "warn" },
+    { icon: "💪", label: "Muscle Mass", value: "29.8 kg → Target 36+ kg", status: "warn" },
+    { icon: "🫀", label: "Visceral Fat", value: "Level 7 (High Risk)", status: "danger" },
+    { icon: "📐", label: "Waist-Hip Ratio", value: "0.92 (Above Safe 0.90)", status: "danger" },
+    { icon: "🧬", label: "InBody Score", value: "68/100 → Target 80+", status: "warn" },
+    { icon: "⚡", label: "BMR", value: "1,517 kcal/day", status: "neutral" },
+    { icon: "🥩", label: "Protein Store", value: "10.6 kg (Low)", status: "warn" },
+  ],
+  phases: [
+    {
+      phase: 1,
+      label: "Foundation + Fat Attack",
+      weeks: "Weeks 1–4",
+      color: "#f97316",
+      goal: "Build movement patterns, ignite fat burning, reduce visceral fat",
+      focus: ["Master form on all movements", "Activate deep core", "Reduce visceral fat level 7→5", "Daily 10k steps"],
+    },
+    {
+      phase: 2,
+      label: "Strength + Definition",
+      weeks: "Weeks 5–9",
+      color: "#3b82f6",
+      goal: "Progressive overload, muscle density, visible abs emerging",
+      focus: ["Increase rep/set volume", "Introduce advanced progressions", "Reduce BF% below 18%", "Core vacuum practice"],
+    },
+    {
+      phase: 3,
+      label: "Shred + Sculpt",
+      weeks: "Weeks 10–12",
+      color: "#10b981",
+      goal: "Final cut, six-pack reveal, athletic aesthetics locked in",
+      focus: ["Peak intensity circuits", "Caloric deficit tightened", "Visible 6-pack target", "Posture + V-taper finisher"],
+    },
+  ],
+  weeklySchedule: [
+    {
+      day: "Monday",
+      focus: "Push (Chest, Shoulders, Triceps)",
+      phase1: [
+        "Push-ups — 4×15",
+        "Wide Push-ups — 3×12",
+        "Pike Push-ups — 3×10",
+        "Dips (Bar) — 3×8",
+        "Diamond Push-ups — 3×10",
+        "Plank — 3×45 sec",
+      ],
+      phase2: [
+        "Archer Push-ups — 4×10",
+        "Pseudo Planche Push-ups — 3×8",
+        "Pike Push-ups — 4×12",
+        "Dips — 4×12",
+        "Decline Push-ups — 3×15",
+        "Ab Wheel Rollout (or plank walk) — 3×10",
+      ],
+      phase3: [
+        "Explosive Push-ups — 5×10",
+        "Ring Dips / Deep Dips — 5×10",
+        "Pike to Handstand Wall Hold — 3×30s",
+        "Tricep Dips — 4×15",
+        "Push-up Circuit 100 reps for time",
+        "L-Sit Hold — 3×20s",
+      ],
+    },
+    {
+      day: "Tuesday",
+      focus: "Back & Biceps (No Pull-up Bar)",
+      phase1: [
+        "Table Inverted Rows — 4×10 (lie under sturdy table, pull chest up)",
+        "Superman Hold — 4×30 sec (lie face down, raise arms + legs)",
+        "Prone Y-T-W Raises — 3×10 each (floor, targets rhomboids + traps)",
+        "Reverse Snow Angels — 3×15 (face down, arms sweep floor)",
+        "Door Frame Row — 3×10 (grip door frame at waist, lean back, pull)",
+        "Bicep Isometric Curl — 3×30 sec (press wrist under table edge)",
+      ],
+      phase2: [
+        "Elevated Inverted Rows — 4×12 (feet raised on chair, steeper angle)",
+        "Superman Pulse — 4×15 (rapid pulses at top of Superman hold)",
+        "Prone Y-T-W Raises — 4×12 each with 2 sec hold",
+        "Archer Inverted Row — 3×8 each side",
+        "Wall Slides — 3×12 (scapular control, shoulder health)",
+        "Towel Bicep Curl — 3×12 (loop towel under foot, curl up)",
+      ],
+      phase3: [
+        "Weighted Inverted Rows — 5×12 (backpack on chest for load)",
+        "One-Arm Inverted Row — 4×8 each side",
+        "Superman to Lat Pulldown Simulation — 4×15",
+        "Floor Renegade Row — 4×10 (push-up position, row elbow back)",
+        "Prone Cobra Hold — 4×30 sec (full back activation)",
+        "Resistance Band Row — 4×15 (if band available) or Door Row 5×12",
+      ],
+    },
+    {
+      day: "Wednesday",
+      focus: "Legs + Explosive Power",
+      phase1: [
+        "Bodyweight Squats — 4×20",
+        "Reverse Lunges — 3×12 each",
+        "Glute Bridges — 3×20",
+        "Step-ups (chair) — 3×12",
+        "Calf Raises — 4×25",
+        "Wall Sit — 3×45 sec",
+      ],
+      phase2: [
+        "Jump Squats — 4×15",
+        "Bulgarian Split Squats — 4×10 each",
+        "Single-Leg Glute Bridge — 3×15",
+        "Broad Jumps — 4×8",
+        "Pistol Squat Progressions — 3×6",
+        "Nordic Curl Negatives — 3×5",
+      ],
+      phase3: [
+        "Pistol Squats — 5×5 each",
+        "Box Jumps (chair) — 4×10",
+        "Shrimp Squats — 3×6",
+        "Sprint intervals 10×20m",
+        "Plyometric Lunges — 4×12",
+        "Single-Leg Calf Raise — 4×20",
+      ],
+    },
+    {
+      day: "Thursday",
+      focus: "Core + Shoulders (Lateral & Rear)",
+      phase1: [
+        "Plank — 4×45 sec",
+        "Bicycle Crunches — 3×20",
+        "Leg Raises — 3×12",
+        "Mountain Climbers — 3×30 sec",
+        "Lateral Raise — 3×15 (water bottles / filled bags as weight)",
+        "Bent-Over Rear Delt Raise — 3×15 (hinge forward 45°, raise arms out)",
+      ],
+      phase2: [
+        "Ab Wheel / Plank Walkout — 4×10",
+        "Hanging Knee Raises — 4×15 (use bar if available, else floor leg raises)",
+        "Russian Twists — 3×20",
+        "Lateral Raise — 4×15 (progressive load: heavier bottles/bag)",
+        "Bent-Over Rear Delt Raise — 4×15 with 2s hold at top",
+        "Face Pull Simulation — 3×15 (resistance band or towel around post)",
+      ],
+      phase3: [
+        "L-Sit Hold — 5×20s",
+        "Dragon Flag Negatives — 3×8",
+        "Windshield Wipers — 4×10",
+        "Lateral Raise — 4×20 (slow tempo, feel the burn)",
+        "Rear Delt Circuit — 3 rounds: 15 bent-over raises + 15 prone Y raises",
+        "Arnold Press Simulation — 3×12 (seated, heavy water bottles)",
+      ],
+    },
+    {
+      day: "Friday",
+      focus: "Push + Core Superset",
+      phase1: [
+        "Push-up to Plank — 4×10",
+        "Dips — 3×8",
+        "Shoulder Taps — 3×20",
+        "Tricep Push-ups — 3×12",
+        "Plank Reach — 3×10",
+        "Side Plank — 3×30s each",
+      ],
+      phase2: [
+        "Archer Push-ups — 4×10",
+        "Dips — 4×12",
+        "Pike Push-ups — 4×10",
+        "Hollow Push-ups — 3×10",
+        "Plank to Downdog — 3×10",
+        "V-ups — 4×15",
+      ],
+      phase3: [
+        "100 Push-up Challenge",
+        "50 Dips Challenge",
+        "Push Circuit AMRAP 10 min",
+        "Planche Lean + L-sit combo",
+        "Windshield Wipers — 4×10",
+        "Explosive Plyo Circuit",
+      ],
+    },
+    {
+      day: "Saturday",
+      focus: "Full Body HIIT + Pull",
+      phase1: [
+        "Burpees — 4×10",
+        "Pull-ups — 3×5",
+        "Jump Squats — 3×15",
+        "Push-ups — 3×15",
+        "Mountain Climbers — 3×30s",
+        "30 min outdoor jog",
+      ],
+      phase2: [
+        "Pull-ups — 5×8",
+        "Burpee Pull-ups — 3×5",
+        "Jump Squats to Squat Hold — 4×10",
+        "HIIT Circuit 4 rounds",
+        "Core finisher 10 min",
+        "Chin-ups — 4×8",
+      ],
+      phase3: [
+        "Muscle-up Attempts — 3×3",
+        "Full Body AMRAP 15 min",
+        "Sprint + Pull superset",
+        "100 Burpee Challenge",
+        "L-sit to Chin-up — 3×5",
+        "Active Recovery Stretch 15 min",
+      ],
+    },
+    {
+      day: "Sunday",
+      focus: "Active Recovery",
+      phase1: ["20 min walk", "Full body stretch — 15 min", "Foam roll / massage", "Breathwork 5 min", "Prep meals for week"],
+      phase2: ["30 min light yoga / mobility", "Hip flexor + hamstring work", "Thoracic spine mobility", "Cold water exposure (bucket)", "Sleep 8 hrs"],
+      phase3: ["Mobility flow 30 min", "Visualization + journaling", "Contrast shower", "Meal prep", "Sleep 8 hrs"],
+    },
+  ],
+  diet: {
+    calories: { current_bmr: 1517, target: "1750–1900 kcal/day (200–300 deficit from TDEE)", protein: "140–160g/day", carbs: "150–180g/day", fat: "50–60g/day" },
+    timing: [
+      { time: "6:30 AM", meal: "Pre-Workout", items: "Black coffee (no sugar) + 5 soaked almonds + 2 walnuts", protein: "3g", purpose: "Activate metabolism, fat oxidation" },
+      { time: "7:00 AM", meal: "Workout", items: "Train fasted or light", protein: "—", purpose: "Maximize fat burn" },
+      { time: "8:30 AM", meal: "Post-Workout Breakfast", items: "4 whole eggs scrambled + 2 egg whites + 1 banana + black coffee", protein: "30g", purpose: "Muscle protein synthesis, replenish glycogen" },
+      { time: "11:30 AM", meal: "Mid-Morning", items: "Greek yogurt 200g + 1 tbsp flaxseeds + berries or 1 fruit", protein: "15g", purpose: "Sustained energy, gut health" },
+      { time: "1:30 PM", meal: "Lunch", items: "150g chicken breast / fish + 1 cup brown rice or ragi + sambar + salad (cucumber, tomato, onion)", protein: "40g", purpose: "Main fuel + micronutrients" },
+      { time: "4:30 PM", meal: "Evening Snack", items: "100g paneer or 2 boiled eggs + 1 apple or guava", protein: "20g", purpose: "Prevent catabolism, hair nutrients" },
+      { time: "7:30 PM", meal: "Dinner", items: "150g fish (salmon/tuna/mackerel preferred) or chicken + mixed veg sabzi + 2 small rotis or 1 cup dal", protein: "40g", purpose: "Lean protein, omega-3 for hair" },
+      { time: "9:30 PM", meal: "Pre-Sleep", items: "1 cup warm milk + pinch turmeric + 1 tsp ashwagandha powder", protein: "8g", purpose: "Cortisol reduction, testosterone support, hair growth" },
+    ],
+    hairFoods: [
+      { food: "Salmon / Mackerel", reason: "Omega-3 DHT blocker, scalp circulation", freq: "4–5x/week" },
+      { food: "Eggs (whole)", reason: "Biotin + protein, keratin synthesis", freq: "Daily" },
+      { food: "Pumpkin seeds", reason: "Zinc + DHT inhibitor (natural)", freq: "Daily — 1 tbsp" },
+      { food: "Spinach + Methi leaves", reason: "Iron, folate, Vit C — prevents shedding", freq: "Daily in meals" },
+      { food: "Amla (Indian Gooseberry)", reason: "Vit C king, collagen for follicles", freq: "1 raw/day or juice" },
+      { food: "Sesame seeds (til)", reason: "Calcium, zinc, copper for hair density", freq: "1 tbsp daily" },
+      { food: "Walnuts", reason: "Biotin, Vit E, selenium — anti-DHT", freq: "5 walnuts/day" },
+      { food: "Carrots + Sweet potato", reason: "Beta-carotene → Vit A for sebum", freq: "4–5x/week" },
+      { food: "Greek yogurt", reason: "Protein + Vit B5 (pantothenic acid)", freq: "Daily" },
+      { food: "Ashwagandha", reason: "Cortisol ↓, testosterone ↑, hair shedding ↓", freq: "Nightly in milk" },
+    ],
+    supplements: [
+      { name: "Whey Protein", dose: "1 scoop post-workout", note: "If food protein falls short of 140g" },
+      { name: "Biotin (5000–10000 mcg)", dose: "1 tab morning with food", note: "Hair, nail, metabolism" },
+      { name: "Zinc (25–50mg)", dose: "1 tab with dinner", note: "DHT blocker, testosterone, immunity" },
+      { name: "Vitamin D3 (2000–4000 IU)", dose: "Morning with fat-containing meal", note: "Testosterone, hair follicle activation" },
+      { name: "Omega-3 Fish Oil (2g EPA+DHA)", dose: "With dinner", note: "Scalp health, anti-inflammatory, fat loss" },
+      { name: "Magnesium Glycinate (400mg)", dose: "Before bed", note: "Sleep quality, cortisol control, muscle recovery" },
+      { name: "Ashwagandha KSM-66 (600mg)", dose: "Before sleep", note: "Cortisol ↓, natural testosterone boost, stress hair loss ↓" },
+    ],
+    hairCare: [
+      "🪥 Scalp massage with warm castor oil + coconut oil mix — 3x/week, 10 min (improves blood flow to follicles)",
+      "🧴 Use a DHT-blocking shampoo (ketoconazole 1% or saw palmetto based) — 3x/week",
+      "🚿 Cool/cold rinse at end of shower — closes cuticles, reduces breakage",
+      "🌿 Onion juice + neem oil blend on scalp — 2x/week, 30 min before wash",
+      "😴 Silk pillowcase or satin cloth — reduces friction breakage",
+      "☀️ Protect scalp from direct Chennai sun — hat or coconut oil barrier",
+      "🧘 Reduce cortisol (stress = #1 hair loss cause) — daily 5 min breathwork",
+    ],
+  },
+  targets: [
+    { metric: "Body Fat %", current: "24.8%", target: "14–16%", timeline: "12 weeks" },
+    { metric: "Muscle Mass", current: "29.8 kg", target: "34–36 kg", timeline: "12 weeks" },
+    { metric: "Waist-Hip Ratio", current: "0.92", target: "<0.88", timeline: "12 weeks" },
+    { metric: "Visceral Fat Level", current: "7", target: "4–5", timeline: "8 weeks" },
+    { metric: "InBody Score", current: "68", target: "78–82", timeline: "12 weeks" },
+    { metric: "Pull-ups", current: "~5 (est.)", target: "15+ clean", timeline: "12 weeks" },
+    { metric: "Push-ups", current: "~20 (est.)", target: "50+ clean", timeline: "12 weeks" },
+  ],
+};
+
+const phaseColors = ["#f97316", "#3b82f6", "#10b981"];
+
+export default function FitnessPlan() {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [activeDay, setActiveDay] = useState(0);
+  const [activePhase, setActivePhase] = useState(0);
+
+  const tabs = [
+    { id: "overview", label: "📊 Analysis" },
+    { id: "workout", label: "💪 Workout" },
+    { id: "diet", label: "🥗 Diet" },
+    { id: "hair", label: "🌿 Hair" },
+    { id: "targets", label: "🎯 Targets" },
+  ];
+
+  const statusColor = (s) => s === "danger" ? "#ef4444" : s === "warn" ? "#f97316" : "#10b981";
+
+  return (
+    <div style={{
+      fontFamily: "'Georgia', 'Times New Roman', serif",
+      background: "#0a0a0f",
+      minHeight: "100vh",
+      color: "#e8e0d4",
+      maxWidth: 820,
+      margin: "0 auto",
+      padding: "0 0 60px",
+    }}>
+      {/* Header */}
+      <div style={{
+        background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+        padding: "36px 24px 28px",
+        borderBottom: "1px solid #1e3a5f",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        <div style={{
+          position: "absolute", top: -40, right: -40,
+          width: 200, height: 200,
+          background: "radial-gradient(circle, rgba(249,115,22,0.15) 0%, transparent 70%)",
+          borderRadius: "50%",
+        }} />
+        <div style={{ fontSize: 11, letterSpacing: 4, color: "#f97316", textTransform: "uppercase", marginBottom: 8 }}>
+          InBody 270 · May 21, 2026
+        </div>
+        <h1 style={{ fontSize: 28, fontWeight: "normal", margin: "0 0 6px", letterSpacing: 1 }}>
+          Azhagan's <span style={{ color: "#f97316" }}>Transformation</span> Plan
+        </h1>
+        <div style={{ fontSize: 13, color: "#8899aa", letterSpacing: 1 }}>
+          12-Week Athletic Body · Six-Pack · Hair Restoration · Zero Equipment
+        </div>
+        <div style={{ display: "flex", gap: 20, marginTop: 20, flexWrap: "wrap" }}>
+          {[["70.6 kg", "Weight"], ["24.8%", "Body Fat"], ["29.8 kg", "Muscle"], ["BMI 23.1", "Score"]].map(([v, l]) => (
+            <div key={l} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 20, fontWeight: "bold", color: "#f97316" }}>{v}</div>
+              <div style={{ fontSize: 10, color: "#667788", letterSpacing: 2, textTransform: "uppercase" }}>{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{
+        display: "flex", overflowX: "auto", gap: 0,
+        background: "#111118", borderBottom: "1px solid #1e2a3a",
+        scrollbarWidth: "none",
+      }}>
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+            flex: "0 0 auto", padding: "14px 18px",
+            background: "none", border: "none", cursor: "pointer",
+            color: activeTab === t.id ? "#f97316" : "#667788",
+            borderBottom: activeTab === t.id ? "2px solid #f97316" : "2px solid transparent",
+            fontSize: 13, letterSpacing: 0.5, whiteSpace: "nowrap",
+            transition: "all 0.2s",
+          }}>{t.label}</button>
+        ))}
+      </div>
+
+      <div style={{ padding: "24px 20px" }}>
+
+        {/* OVERVIEW TAB */}
+        {activeTab === "overview" && (
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 16 }}>
+              InBody Analysis
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 28 }}>
+              {data.insights.map(i => (
+                <div key={i.label} style={{
+                  background: "#111118", border: `1px solid ${statusColor(i.status)}33`,
+                  borderRadius: 8, padding: "12px 14px",
+                  borderLeft: `3px solid ${statusColor(i.status)}`,
+                }}>
+                  <div style={{ fontSize: 16, marginBottom: 4 }}>{i.icon}</div>
+                  <div style={{ fontSize: 10, color: "#667788", letterSpacing: 1, textTransform: "uppercase" }}>{i.label}</div>
+                  <div style={{ fontSize: 12, color: statusColor(i.status), marginTop: 2 }}>{i.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 16 }}>
+              Key Findings
+            </div>
+            {[
+              { title: "🚨 Visceral Fat Level 7", body: "This is the most urgent marker. Visceral fat (around organs) is linked to hormonal disruption, low testosterone, and accelerated hair loss. Priority #1 to attack." },
+              { title: "⚠️ Waist-Hip Ratio 0.92", body: "Above the safe 0.90 threshold. Indicates central obesity. Will normalize as visceral fat drops in Phase 1–2." },
+              { title: "💪 Low Protein Store (10.6 kg)", body: "Muscle is underdeveloped relative to frame. High protein diet + progressive pull-up/push-up volume will add 4–6 kg lean mass in 12 weeks." },
+              { title: "🔬 BMR 1,517 kcal", body: "Your metabolism is moderate. Eating 1,750–1,900 kcal creates a sustainable deficit without muscle loss. Do NOT go below 1,600 kcal." },
+            ].map(f => (
+              <div key={f.title} style={{ background: "#111118", border: "1px solid #1e2a3a", borderRadius: 8, padding: "14px 16px", marginBottom: 10 }}>
+                <div style={{ fontWeight: "bold", fontSize: 13, marginBottom: 6 }}>{f.title}</div>
+                <div style={{ fontSize: 12, color: "#99aabb", lineHeight: 1.6 }}>{f.body}</div>
+              </div>
+            ))}
+
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 16, marginTop: 28 }}>
+              3-Phase Roadmap
+            </div>
+            {data.phases.map((p, i) => (
+              <div key={p.phase} style={{
+                background: "#111118", border: `1px solid ${p.color}33`,
+                borderRadius: 8, padding: "16px", marginBottom: 10,
+                borderLeft: `4px solid ${p.color}`,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                  <div>
+                    <span style={{ fontSize: 10, letterSpacing: 2, color: p.color, textTransform: "uppercase" }}>Phase {p.phase} · {p.weeks}</span>
+                    <div style={{ fontSize: 15, fontWeight: "bold", marginTop: 4 }}>{p.label}</div>
+                  </div>
+                  <div style={{ background: p.color + "22", color: p.color, padding: "4px 10px", borderRadius: 20, fontSize: 10 }}>Active</div>
+                </div>
+                <div style={{ fontSize: 12, color: "#8899aa", marginBottom: 10 }}>{p.goal}</div>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {p.focus.map(f => (
+                    <span key={f} style={{ background: "#1a2030", padding: "3px 10px", borderRadius: 20, fontSize: 11, color: "#ccd0d8" }}>{f}</span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* WORKOUT TAB */}
+        {activeTab === "workout" && (
+          <div>
+            {/* Phase Selector */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+              {["Phase 1 (W1-4)", "Phase 2 (W5-9)", "Phase 3 (W10-12)"].map((p, i) => (
+                <button key={p} onClick={() => setActivePhase(i)} style={{
+                  flex: 1, padding: "10px 6px", borderRadius: 8,
+                  border: `1px solid ${activePhase === i ? phaseColors[i] : "#1e2a3a"}`,
+                  background: activePhase === i ? phaseColors[i] + "22" : "#111118",
+                  color: activePhase === i ? phaseColors[i] : "#667788",
+                  cursor: "pointer", fontSize: 11, fontFamily: "inherit",
+                }}>
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            {/* Day Selector */}
+            <div style={{ display: "flex", overflowX: "auto", gap: 8, marginBottom: 20, paddingBottom: 4 }}>
+              {data.weeklySchedule.map((d, i) => (
+                <button key={d.day} onClick={() => setActiveDay(i)} style={{
+                  flex: "0 0 auto", padding: "8px 14px", borderRadius: 8,
+                  border: `1px solid ${activeDay === i ? phaseColors[activePhase] : "#1e2a3a"}`,
+                  background: activeDay === i ? phaseColors[activePhase] + "22" : "#111118",
+                  color: activeDay === i ? phaseColors[activePhase] : "#667788",
+                  cursor: "pointer", fontSize: 11, fontFamily: "inherit",
+                  whiteSpace: "nowrap",
+                }}>
+                  {d.day.slice(0, 3)}
+                </button>
+              ))}
+            </div>
+
+            {/* Day Detail */}
+            {(() => {
+              const day = data.weeklySchedule[activeDay];
+              const exercises = activePhase === 0 ? day.phase1 : activePhase === 1 ? day.phase2 : day.phase3;
+              return (
+                <div>
+                  <div style={{ background: "#111118", border: `1px solid ${phaseColors[activePhase]}44`, borderRadius: 10, padding: "18px" }}>
+                    <div style={{ fontSize: 10, letterSpacing: 3, color: phaseColors[activePhase], textTransform: "uppercase", marginBottom: 6 }}>
+                      {day.day}
+                    </div>
+                    <div style={{ fontSize: 17, fontWeight: "bold", marginBottom: 16 }}>{day.focus}</div>
+                    {exercises.map((ex, i) => (
+                      <div key={i} style={{
+                        display: "flex", alignItems: "center", gap: 12,
+                        padding: "11px 0", borderBottom: i < exercises.length - 1 ? "1px solid #1e2a3a" : "none",
+                      }}>
+                        <div style={{
+                          width: 28, height: 28, borderRadius: "50%",
+                          background: phaseColors[activePhase] + "22",
+                          color: phaseColors[activePhase], display: "flex", alignItems: "center",
+                          justifyContent: "center", fontSize: 12, fontWeight: "bold", flexShrink: 0,
+                        }}>{i + 1}</div>
+                        <div style={{ fontSize: 13, lineHeight: 1.4 }}>{ex}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ background: "#111118", border: "1px solid #1e2a3a", borderRadius: 10, padding: "16px", marginTop: 14 }}>
+                    <div style={{ fontSize: 11, letterSpacing: 2, color: "#f97316", textTransform: "uppercase", marginBottom: 12 }}>Workout Protocol</div>
+                    {[
+                      ["Rest Between Sets", activePhase === 0 ? "60–90 sec" : activePhase === 1 ? "45–60 sec" : "30–45 sec"],
+                      ["Tempo", "2 sec down, 1 sec up, 1 sec hold"],
+                      ["Warmup", "5 min jumping jacks + arm circles + leg swings"],
+                      ["Cooldown", "5 min stretch — focus muscle worked"],
+                      ["Morning Walk", "10,000 steps daily — non-negotiable for visceral fat"],
+                    ].map(([k, v]) => (
+                      <div key={k} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid #1a2030", fontSize: 12 }}>
+                        <span style={{ color: "#8899aa" }}>{k}</span>
+                        <span style={{ color: "#e8e0d4", textAlign: "right", maxWidth: "55%" }}>{v}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* DIET TAB */}
+        {activeTab === "diet" && (
+          <div>
+            {/* Macro Targets */}
+            <div style={{ background: "#111118", border: "1px solid #1e2a3a", borderRadius: 10, padding: "16px", marginBottom: 20 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 14 }}>Daily Macro Targets</div>
+              {[
+                ["Daily Calories", "1,750–1,900 kcal", "#f97316"],
+                ["Protein", "140–160g/day (2g per kg bodyweight)", "#3b82f6"],
+                ["Carbohydrates", "150–180g (complex only)", "#10b981"],
+                ["Healthy Fats", "50–60g (omega-3 priority)", "#a855f7"],
+                ["Water", "4–5 litres/day (Chennai heat)", "#06b6d4"],
+              ].map(([k, v, c]) => (
+                <div key={k} style={{
+                  display: "flex", justifyContent: "space-between", alignItems: "center",
+                  padding: "10px 0", borderBottom: "1px solid #1a2030", fontSize: 12,
+                }}>
+                  <span style={{ color: "#8899aa" }}>{k}</span>
+                  <span style={{ color: c, fontWeight: "bold", textAlign: "right", maxWidth: "55%" }}>{v}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Meal Plan */}
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 14 }}>
+              Daily Meal Plan
+            </div>
+            {data.diet.timing.map((m, i) => (
+              <div key={i} style={{
+                background: "#111118", border: "1px solid #1e2a3a",
+                borderRadius: 10, padding: "14px 16px", marginBottom: 10,
+                borderLeft: "3px solid #3b82f6",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                  <span style={{ fontSize: 10, color: "#3b82f6", letterSpacing: 2, textTransform: "uppercase" }}>{m.time} · {m.meal}</span>
+                  <span style={{ fontSize: 10, color: "#10b981" }}>{m.protein} protein</span>
+                </div>
+                <div style={{ fontSize: 13, marginBottom: 6, lineHeight: 1.5 }}>{m.items}</div>
+                <div style={{ fontSize: 11, color: "#667788" }}>💡 {m.purpose}</div>
+              </div>
+            ))}
+
+            {/* Supplements */}
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 14, marginTop: 24 }}>
+              Supplement Stack
+            </div>
+            {data.diet.supplements.map((s, i) => (
+              <div key={i} style={{
+                background: "#111118", border: "1px solid #1e2a3a",
+                borderRadius: 8, padding: "12px 14px", marginBottom: 8,
+                display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12,
+              }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 13, fontWeight: "bold", marginBottom: 3 }}>{s.name}</div>
+                  <div style={{ fontSize: 11, color: "#8899aa" }}>{s.dose}</div>
+                </div>
+                <div style={{ fontSize: 11, color: "#667788", textAlign: "right", maxWidth: "45%" }}>{s.note}</div>
+              </div>
+            ))}
+
+            {/* Foods to avoid */}
+            <div style={{ background: "#1a1010", border: "1px solid #ef444433", borderRadius: 10, padding: "16px", marginTop: 20 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#ef4444", textTransform: "uppercase", marginBottom: 12 }}>Eliminate Completely</div>
+              {["Maida / white bread / biscuits", "Sugary drinks (chai with sugar, juice, soda)", "Fried snacks (bajji, chips, murukku)", "Alcohol", "White rice > 1 cup per meal", "Late night eating after 9:30 PM"].map(f => (
+                <div key={f} style={{ padding: "7px 0", borderBottom: "1px solid #2a1a1a", fontSize: 12, color: "#cc8888" }}>
+                  ✕ {f}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* HAIR TAB */}
+        {activeTab === "hair" && (
+          <div>
+            <div style={{ background: "#0f1a0f", border: "1px solid #10b98133", borderRadius: 10, padding: "16px", marginBottom: 20 }}>
+              <div style={{ fontSize: 13, fontWeight: "bold", color: "#10b981", marginBottom: 8 }}>🌿 Hair Loss + Baldness Repair Protocol</div>
+              <div style={{ fontSize: 12, color: "#8aaa8a", lineHeight: 1.7 }}>
+                Your visceral fat (Level 7) and high cortisol from stress are the two primary drivers of hair loss. As visceral fat drops and testosterone normalizes, shedding will reduce. The diet + supplements below directly target DHT (the hormone responsible for male pattern baldness) while feeding follicles from inside.
+              </div>
+            </div>
+
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#10b981", textTransform: "uppercase", marginBottom: 14 }}>
+              Power Foods for Hair Density
+            </div>
+            {data.diet.hairFoods.map((h, i) => (
+              <div key={i} style={{
+                background: "#111118", border: "1px solid #10b98122",
+                borderRadius: 8, padding: "12px 14px", marginBottom: 8,
+                borderLeft: "3px solid #10b981",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 10 }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: "bold", marginBottom: 4 }}>🌾 {h.food}</div>
+                    <div style={{ fontSize: 11, color: "#8899aa" }}>{h.reason}</div>
+                  </div>
+                  <div style={{ background: "#10b98122", color: "#10b981", padding: "4px 10px", borderRadius: 20, fontSize: 10, whiteSpace: "nowrap" }}>{h.freq}</div>
+                </div>
+              </div>
+            ))}
+
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#10b981", textTransform: "uppercase", marginBottom: 14, marginTop: 24 }}>
+              Topical + Lifestyle Protocol
+            </div>
+            {data.diet.hairCare.map((h, i) => (
+              <div key={i} style={{
+                background: "#111118", border: "1px solid #1e2a3a",
+                borderRadius: 8, padding: "12px 14px", marginBottom: 8,
+                fontSize: 12, lineHeight: 1.6, color: "#ccddcc",
+              }}>{h}</div>
+            ))}
+
+            <div style={{ background: "#111118", border: "1px solid #a855f733", borderRadius: 10, padding: "16px", marginTop: 20 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#a855f7", textTransform: "uppercase", marginBottom: 12 }}>
+                Medical Options (Consult Dermatologist)
+              </div>
+              {[
+                ["Minoxidil 5% (topical)", "Proven to reactivate dormant follicles. Apply 1ml on scalp 2x/day. Takes 4–6 months to show results. Available OTC."],
+                ["Finasteride 1mg (oral)", "Blocks DHT at 5-alpha reductase. Prescription needed. Most effective for pattern baldness. Discuss with dermatologist."],
+                ["Dermaroller (0.5mm)", "Micro-needling stimulates collagen + blood flow to follicles. Use 1x/week before oil massage."],
+                ["PRP Therapy", "Platelet-Rich Plasma injections. 3–6 sessions. Consider after 3 months if topical isn't enough."],
+              ].map(([t, d]) => (
+                <div key={t} style={{ padding: "10px 0", borderBottom: "1px solid #1e2a3a" }}>
+                  <div style={{ fontSize: 13, color: "#c0a0dd", marginBottom: 4 }}>{t}</div>
+                  <div style={{ fontSize: 11, color: "#8877aa", lineHeight: 1.6 }}>{d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TARGETS TAB */}
+        {activeTab === "targets" && (
+          <div>
+            <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 16 }}>
+              12-Week Transformation Targets
+            </div>
+            {data.targets.map((t, i) => (
+              <div key={i} style={{
+                background: "#111118", border: "1px solid #1e2a3a",
+                borderRadius: 10, padding: "16px", marginBottom: 10,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10 }}>
+                  <div style={{ fontSize: 14, fontWeight: "bold" }}>{t.metric}</div>
+                  <div style={{ fontSize: 10, color: "#667788", background: "#1a2030", padding: "3px 10px", borderRadius: 20 }}>{t.timeline}</div>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 18, color: "#ef4444", fontWeight: "bold" }}>{t.current}</div>
+                    <div style={{ fontSize: 10, color: "#667788", textTransform: "uppercase", letterSpacing: 1 }}>Now</div>
+                  </div>
+                  <div style={{ flex: 1, height: 2, background: "linear-gradient(90deg, #ef4444, #10b981)", borderRadius: 2 }} />
+                  <div style={{ textAlign: "center" }}>
+                    <div style={{ fontSize: 18, color: "#10b981", fontWeight: "bold" }}>{t.target}</div>
+                    <div style={{ fontSize: 10, color: "#667788", textTransform: "uppercase", letterSpacing: 1 }}>Goal</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Weekly Check-in Protocol */}
+            <div style={{ background: "#111118", border: "1px solid #f9731633", borderRadius: 10, padding: "16px", marginTop: 20 }}>
+              <div style={{ fontSize: 11, letterSpacing: 3, color: "#f97316", textTransform: "uppercase", marginBottom: 14 }}>
+                Weekly Check-In Protocol
+              </div>
+              {[
+                ["Every Sunday morning", "Weigh yourself fasted, before food"],
+                ["Every 4 weeks", "Take front + side progress photos (same lighting)"],
+                ["Week 4 + Week 8", "Retest InBody (Apolllo, Fortis, or any InBody centre Chennai)"],
+                ["Sleep", "7.5–8 hrs non-negotiable — GH released at night builds muscle"],
+                ["Stress", "Cortisol = belly fat + hair loss. 5 min breathwork daily"],
+                ["Track food", "Use HealthifyMe or Cronometer — first 4 weeks minimum"],
+              ].map(([k, v]) => (
+                <div key={k} style={{ padding: "9px 0", borderBottom: "1px solid #1e2a3a", display: "flex", gap: 12, fontSize: 12 }}>
+                  <span style={{ color: "#f97316", flexShrink: 0 }}>→</span>
+                  <div>
+                    <span style={{ color: "#e8e0d4", fontWeight: "bold" }}>{k}: </span>
+                    <span style={{ color: "#8899aa" }}>{v}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Motivation */}
+            <div style={{
+              background: "linear-gradient(135deg, #1a1a2e, #0f3460)",
+              border: "1px solid #3b82f633", borderRadius: 10, padding: "20px", marginTop: 16,
+              textAlign: "center",
+            }}>
+              <div style={{ fontSize: 24, marginBottom: 10 }}>🔥</div>
+              <div style={{ fontSize: 14, lineHeight: 1.7, color: "#aabbcc" }}>
+                Aryan and Sana are watching you become the version of yourself you want them to see.
+                <br /><span style={{ color: "#f97316" }}>12 weeks. No excuses. No gym needed.</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+}
