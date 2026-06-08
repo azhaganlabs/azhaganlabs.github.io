@@ -1,12 +1,5 @@
+# _config.yml
 title: Azhagan Labs
-description: Notes on startups, AI, health, career, and systems
+description: Personal OS — Startup, Fitness, Career, Finance
 url: "https://azhaganlabs.github.io"
-theme: minima
-
-markdown: kramdown
-highlighter: rouge
-
-plugins:
-  - jekyll-feed
-  - jekyll-seo-tag
-  - jekyll-sitemap
+exclude: ["README.md", "node_modules"]
