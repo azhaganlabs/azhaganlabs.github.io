@@ -7,14 +7,14 @@
   --burgundy-glow: rgba(109, 26, 42, 0.35);
   --gold: #C9A84C;
   --gold-dim: rgba(201, 168, 76, 0.15);
-  --bg-void: #080808;
+  --bg-void: #0b0b0d;
   --bg-base: #0f0f0f;
   --bg-card: #161616;
   --bg-card-hover: #1e1e1e;
   --bg-overlay: #222222;
   --text-primary: #E8E2D9;
-  --text-secondary: #9A9490;
-  --text-muted: #5A5550;
+  --text-secondary: #c7c0ba;
+  --text-muted: #8d8782;
   --border: rgba(255,255,255,0.07);
   --border-hover: rgba(255,255,255,0.14);
   --font-display: 'Cormorant', 'Cormorant Garamond', Georgia, serif;
@@ -47,7 +47,8 @@ body {
   justify-content: space-between;
   padding: 0 5vw;
   height: 64px;
-  background: linear-gradient(to bottom, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.0) 100%);
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(12px);
   transition: background var(--transition);
 }
 
@@ -96,7 +97,7 @@ body {
 /* ── HERO ── */
 .hero {
   position: relative;
-  min-height: 82vh;
+  min-height: 72vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -108,8 +109,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(109,26,42,0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 80% 30%, rgba(109,26,42,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 20% 60%, rgba(109,26,42,0.35) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 80% 30%, rgba(109,26,42,0.18) 0%, transparent 60%),
     linear-gradient(160deg, #0f0f0f 0%, #080808 100%);
 }
 
@@ -123,7 +124,7 @@ body {
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 680px;
+  max-width: 860px;
 }
 
 .hero-eyebrow {
@@ -201,8 +202,9 @@ body {
 }
 
 .card {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 4px;
   overflow: hidden;
   text-decoration: none;
@@ -213,8 +215,9 @@ body {
 
 .card:hover {
   transform: scale(1.03);
-  background: var(--bg-card-hover);
-  border-color: var(--border-hover);
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.16);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
 }
 
 .card-accent {
@@ -357,8 +360,9 @@ body {
 
 /* ── ARTIFACT WRAPPER ── */
 .artifact-container {
-  background: var(--bg-card);
-  border: 0.5px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 4px;
   overflow: hidden;
   margin-bottom: 2rem;
